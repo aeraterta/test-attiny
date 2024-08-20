@@ -1,0 +1,46 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  unit-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.0'
+
+      - name: Install Ceedling
+        run: gem install ceedling
+
+      - name: Install gcc-avr
+        run: sudo apt-get update && sudo apt-get install -y gcc-avr
+
+      - name: Run Ceedling tests
+        run: ceedling
+
+  build:
+      name: Build the project
+      runs-on: ubuntu-latest
+      steps:
+        - name: Download the source code
+          uses: actions/checkout@v3
+
+        - name: Build
+          uses: aeraterta/mplab-xc8-action@v1.0
+          with:
+            project: firmware.X
+            packs: "ATtiny_DFP=3.1.260"
+            configuration: default
+            mplabx-version: 6.20
+            xc8-version: 2.50

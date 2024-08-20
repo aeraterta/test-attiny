@@ -36,10 +36,10 @@ jobs:
         - name: Download the source code
           uses: actions/checkout@v3
 
-        - name: Build
-          uses: aeraterta/mplab-xc8-action@v1.0
+        - name: Build project with MPLAB X IDE
+          uses: aeraterta/mplab-xc8-action@1.0
           with:
-            project: firmware.X
+            project: gyrofun.X
             packs: "ATtiny_DFP=3.1.260"
             configuration: default
             mplabx-version: 6.20

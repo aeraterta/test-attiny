@@ -36,11 +36,20 @@ jobs:
         - name: Download the source code
           uses: actions/checkout@v3
 
+        - name: Set environment variable
+          run: echo "PROJECT_NAME=lsm.X" >> $GITHUB_ENV
+
         - name: Build project with MPLAB X IDE
           uses: aeraterta/mplab-xc8-action@1.0
           with:
-            project: gyrofun.X
+            project: ${{ env.PROJECT_NAME }}
             packs: "ATtiny_DFP=3.1.260"
             configuration: default
             mplabx-version: 6.20
             xc8-version: 2.50
+            
+        - name: Upload ELF and HEX files as artifacts
+          uses: actions/upload-artifact@v3
+          with:
+            name: attiny-artifacts
+            path: ${{ env.PROJECT_NAME }}/dist/default/production/
